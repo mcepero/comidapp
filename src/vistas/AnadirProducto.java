@@ -9,7 +9,9 @@ import java.awt.Color;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -23,14 +25,15 @@ import utils.UsuarioActual;
  * @author Manuel
  */
 public class AnadirProducto extends javax.swing.JFrame {
-    
+
     private Carta carta;
     private File imagen;
+
     /**
      * Creates new form AnadirProductoo
      */
     public AnadirProducto(Carta carta) {
-        this.carta=carta;
+        this.carta = carta;
         initComponents();
         jTextFieldImagen.setEditable(false);
     }
@@ -202,16 +205,24 @@ public class AnadirProducto extends javax.swing.JFrame {
                 jLabelMensaje.setForeground(Color.red);
             } else {
                 SocketHandler.getOut().println(Mensajes.PETICION_ANADIR_PRODUCTO + "--" + UsuarioActual.getId() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldIngredientes.getText() + "--" + jTextFieldPrecio.getText());
-               /* FileInputStream fis = new FileInputStream(imagen);
+                //SocketHandler.getOut().println("imagen");
+                long length = imagen.length();
+                
+                byte[] bytes = new byte[8096];//Files.readAllBytes(imagen.toPath());
+                FileInputStream in = new FileInputStream(imagen);
+                OutputStream out = SocketHandler.getSocket().getOutputStream();
+
                 int count;
+                while ((count = in.read(bytes)) > 0) {
+                    System.out.println("Cliente!!");
+                    out.write(bytes, 0, count);
+                }
+                /*count = 0;
+                out.write(bytes,0,count);
+                System.out.println("Enviado");*/
+               in.close();
+                /*out.close();*/
 
-                OutputStream output= SocketHandler.getSocket().getOutputStream();
-		byte[] buffer = new byte[4096];
-		 SocketHandler.getOut().println("imagen"+"--"+"hola");
-
-		while (fis.read(buffer) > 0) {
-                      output.write(buffer);
-		}*/
                 if (SocketHandler.getIn().readLine().equals(Mensajes.PETICION_ANADIR_PRODUCTO_CORRECTO)) {
                     carta.leerCarta();
                     dispose();
@@ -231,13 +242,13 @@ public class AnadirProducto extends javax.swing.JFrame {
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
         int result = fc.showOpenDialog(this);
         fc.setVisible(true);
-        
+
         if (result != JFileChooser.CANCEL_OPTION) {
             imagen = fc.getSelectedFile();
             jTextFieldImagen.setText(imagen.getAbsoluteFile().toString());
         }
 
-        
+
     }//GEN-LAST:event_jButtonImagenActionPerformed
 
     public Carta getCarta() {

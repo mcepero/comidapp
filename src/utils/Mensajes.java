@@ -23,6 +23,7 @@ public class Mensajes {
     public final static String PETICION_ANADIR_REPARTIDOR = "PR10ANADIRREPARTIDOR";
     public final static String PETICION_MOSTRAR_REPARTIDORES = "PR11MOSTRARREPARTIDORES";
     public final static String PETICION_ELIMINAR_REPARTIDOR = "PR12ELIMINARREPARTIDOR";
+    public final static String PETICION_FOTO_PRODUCTO = "PR13FOTOPRODUCTO";
 
     //Correcto
     public final static String PETICION_LOGIN_RESTAURANTE_CORRECTO = "CR1LOGIN";
@@ -37,6 +38,7 @@ public class Mensajes {
     public final static String PETICION_ANADIR_REPARTIDOR_CORRECTO = "CR10ANADIRREPARTIDOR";
     public final static String PETICION_MOSTRAR_REPARTIDORES_CORRECTO = "CR11MOSTRARREPARTIDORES";
     public final static String PETICION_ELIMINAR_REPARTIDOR_CORRECTO = "CR12ELIMINARREPARTIDOR";
+    public final static String PETICION_FOTO_PRODUCTO_CORRECTO = "CR13FOTOPRODUCTO";
 
     //Error
     public final static String PETICION_LOGIN_RESTAURANTE_ERROR = "ER1LOGIN";

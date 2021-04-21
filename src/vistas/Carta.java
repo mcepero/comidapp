@@ -9,10 +9,19 @@ import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Insets;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
@@ -40,12 +49,13 @@ public class Carta extends javax.swing.JPanel {
         initComponents();
         GridBagLayout gl = new java.awt.GridBagLayout();
         jPanelContenedor.setLayout(gl);
-        setSize(1000,1800);
+        setSize(1000, 1800);
 
         leerCarta();
     }
 
     public void leerCarta() {
+        ArrayList<JPanelProducto> productos = new ArrayList<>();
         GridBagConstraints constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.VERTICAL;
 
@@ -75,14 +85,37 @@ public class Carta extends javax.swing.JPanel {
                     producto.getjLabelNombre().setAlignmentX(CENTER_ALIGNMENT);
                     producto.getjLabelIngredientes().setText(args[2]);
                     producto.getjLabelPrecio().setText(args[3]);
+
+                    /*leerImagen();
+                    BufferedImage image = ImageIO.read(new File("E:\\manuel\\Documents\\DAM\\2 DAM 2020\\Proyecto\\Comidapp\\imagenesproductos\\imagenproducto.jpg"));
+                    JLabel picLabel = new JLabel(new ImageIcon(image));
+                    producto.getjPanelImagen().add(picLabel);
+                    producto.getjPanelImagen().validate();
+                    producto.getjPanelImagen().repaint();*/
                     jPanelContenedor.add(producto, constraints);
                     //jScrollPane1.add(producto, constraints);
                     jPanelContenedor.validate();
                     producto.setVisible(true);
                     producto.setSize(675, 100);
                     jPanelContenedor.repaint();
+                    productos.add(producto);
                     //x++;
                     y++;
+                }
+
+                for (int i = 0; i < productos.size(); i++) {
+                    SocketHandler.getOut().println(Mensajes.PETICION_FOTO_PRODUCTO + "--" + productos.get(i).getId());
+                    leerImagen();
+                    BufferedImage image = ImageIO.read(new File("E:\\manuel\\Documents\\DAM\\2 DAM 2020\\Proyecto\\Comidapp\\imagenesproductos\\imagenproducto.jpg"));
+                    Image newImage = image.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+                    JLabel picLabel = new JLabel(new ImageIcon(newImage));
+                    picLabel.setBounds(x, y, 100,100);
+                    productos.get(i).getjPanelImagen().add(picLabel);
+                    productos.get(i).getjPanelImagen().validate();
+                    productos.get(i).getjPanelImagen().repaint();
+                    productos.get(i).validate();
+                    productos.get(i).repaint();
+
                 }
 
             } catch (IOException ex) {
@@ -93,6 +126,30 @@ public class Carta extends javax.swing.JPanel {
             Logger.getLogger(Carta.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    public void leerImagen() {
+        InputStream in = null;
+        OutputStream out = null;
+        ArrayList<Byte> bytesImagen = new ArrayList<>();
+        File imagen = new File("E:\\manuel\\Documents\\DAM\\2 DAM 2020\\Proyecto\\Comidapp\\imagenesproductos\\imagenproducto.jpg");
+        try {
+            in = SocketHandler.getSocket().getInputStream();
+            out = new FileOutputStream(imagen);
+            byte[] bytes = new byte[8096];
+
+            int count;
+
+            do {
+                count = in.read(bytes);
+                out.write(bytes, 0, count);
+            } while (count == 8096);
+
+            out.close();
+            /*in.close();*/
+        } catch (IOException ex) {
+            Logger.getLogger(Carta.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
