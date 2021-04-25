@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import utils.Mensajes;
 import utils.SocketHandler;
@@ -204,28 +205,30 @@ public class AnadirProducto extends javax.swing.JFrame {
                 jLabelMensaje.setText("Precio incorrecto (introduce formato 0.0)");
                 jLabelMensaje.setForeground(Color.red);
             } else {
-                SocketHandler.getOut().println(Mensajes.PETICION_ANADIR_PRODUCTO + "--" + UsuarioActual.getId() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldIngredientes.getText() + "--" + jTextFieldPrecio.getText());
-                //SocketHandler.getOut().println("imagen");
-                long length = imagen.length();
-                
-                byte[] bytes = new byte[8096];//Files.readAllBytes(imagen.toPath());
-                FileInputStream in = new FileInputStream(imagen);
-                OutputStream out = SocketHandler.getSocket().getOutputStream();
+                if (!jTextFieldImagen.getText().isEmpty()) {
+                    SocketHandler.getOut().println(Mensajes.PETICION_ANADIR_PRODUCTO + "--" + UsuarioActual.getId() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldIngredientes.getText() + "--" + jTextFieldPrecio.getText());
+                    //SocketHandler.getOut().println("imagen");
+                    //long length = imagen.length();
 
-                int count;
-                while ((count = in.read(bytes)) > 0) {
-                    System.out.println("Cliente!!");
-                    out.write(bytes, 0, count);
-                }
-                /*count = 0;
-                out.write(bytes,0,count);
-                System.out.println("Enviado");*/
-               in.close();
-                /*out.close();*/
+                    byte[] bytes = new byte[8096];//Files.readAllBytes(imagen.toPath());
+                    FileInputStream in = new FileInputStream(imagen);
+                    OutputStream out = SocketHandler.getSocket().getOutputStream();
 
-                if (SocketHandler.getIn().readLine().equals(Mensajes.PETICION_ANADIR_PRODUCTO_CORRECTO)) {
-                    carta.leerCarta();
-                    dispose();
+                    int count;
+                    while ((count = in.read(bytes)) > 0) {
+                        out.write(bytes, 0, count);
+                    }
+
+                    in.close();
+                    /*out.close();*/
+
+                    if (SocketHandler.getIn().readLine().equals(Mensajes.PETICION_ANADIR_PRODUCTO_CORRECTO)) {
+                        carta.leerCarta();
+                        dispose();
+                    }
+                } else {
+                    jLabelMensaje.setText("Selecciona una imagen");
+                    jLabelMensaje.setForeground(Color.red);
                 }
             }
         } catch (IOException ex) {
@@ -240,6 +243,8 @@ public class AnadirProducto extends javax.swing.JFrame {
     private void jButtonImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImagenActionPerformed
         JFileChooser fc = new JFileChooser();
         fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("JPG & PNG Images", "jpg", "png");
+        fc.setFileFilter(imgFilter);
         int result = fc.showOpenDialog(this);
         fc.setVisible(true);
 

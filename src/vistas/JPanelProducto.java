@@ -29,6 +29,7 @@ import utils.SocketHandler;
 public class JPanelProducto extends javax.swing.JPanel {
 
     private Carta carta;
+    private String imagen;
     private int id;
 
     /**
@@ -95,7 +96,7 @@ public class JPanelProducto extends javax.swing.JPanel {
         jLabelIngredientes.setBorder(null);
         jScrollPane1.setViewportView(jLabelIngredientes);
 
-        jPanelImagen.setBackground(new java.awt.Color(153, 204, 255));
+        jPanelImagen.setBackground(new java.awt.Color(153, 0, 0));
 
         javax.swing.GroupLayout jPanelImagenLayout = new javax.swing.GroupLayout(jPanelImagen);
         jPanelImagen.setLayout(jPanelImagenLayout);
@@ -216,7 +217,13 @@ public class JPanelProducto extends javax.swing.JPanel {
         this.jPanelImagen = jPanelImagen;
     }
 
+    public String getImagen() {
+        return imagen;
+    }
 
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonEditar;
     private javax.swing.JButton jButtonEliminar;

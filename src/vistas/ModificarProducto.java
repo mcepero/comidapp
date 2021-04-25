@@ -6,9 +6,14 @@
 package vistas;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import utils.Mensajes;
 import utils.SocketHandler;
 import utils.UsuarioActual;
@@ -20,6 +25,7 @@ import utils.UsuarioActual;
 public class ModificarProducto extends javax.swing.JFrame {
 
     private JPanelProducto producto;
+    private File imagen;
 
     /**
      * Creates new form AnadirProductoo
@@ -27,6 +33,8 @@ public class ModificarProducto extends javax.swing.JFrame {
     public ModificarProducto(JPanelProducto producto) {
         this.producto = producto;
         initComponents();
+        jTextFieldImagen.setEditable(false);
+        //jTextFieldImagen.setText(producto);
         jTextFieldNombre.setText(producto.getjLabelNombre().getText());
         jTextFieldIngredientes.setText(producto.getjLabelIngredientes().getText());
         jTextFieldPrecio.setText(producto.getjLabelPrecio().getText());
@@ -50,6 +58,9 @@ public class ModificarProducto extends javax.swing.JFrame {
         jButtonGuardar = new javax.swing.JButton();
         jTextFieldIngredientes = new javax.swing.JTextField();
         jLabelMensaje = new javax.swing.JLabel();
+        jLabelImagen = new javax.swing.JLabel();
+        jTextFieldImagen = new javax.swing.JTextField();
+        jButtonImagen = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -93,6 +104,24 @@ public class ModificarProducto extends javax.swing.JFrame {
             }
         });
 
+        jLabelImagen.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelImagen.setText("Imagen: ");
+
+        jTextFieldImagen.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jTextFieldImagen.setToolTipText("");
+        jTextFieldImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldImagenActionPerformed(evt);
+            }
+        });
+
+        jButtonImagen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/folder.png"))); // NOI18N
+        jButtonImagen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonImagenActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -102,21 +131,29 @@ public class ModificarProducto extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabelIngredientes))
-                        .addGap(57, 57, 57)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextFieldIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(141, 141, 141)
-                        .addComponent(jButtonGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelIngredientes))
+                                .addGap(57, 57, 57)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTextFieldNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTextFieldIngredientes, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(57, 57, 57)
+                                .addComponent(jTextFieldImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButtonImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(63, 63, 63)
-                        .addComponent(jLabelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(31, 31, 31))
+                        .addComponent(jLabelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(140, 140, 140)
+                        .addComponent(jButtonGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -133,11 +170,16 @@ public class ModificarProducto extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextFieldPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelPrecio))
+                .addGap(19, 19, 19)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabelImagen)
+                    .addComponent(jTextFieldImagen, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonImagen, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22)
+                .addGap(18, 18, 18)
                 .addComponent(jButtonGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26))
+                .addGap(20, 20, 20))
         );
 
         pack();
@@ -168,7 +210,23 @@ public class ModificarProducto extends javax.swing.JFrame {
                 jLabelMensaje.setText("Precio incorrecto (introduce formato 0.0)");
                 jLabelMensaje.setForeground(Color.red);
             } else {
-                SocketHandler.getOut().println(Mensajes.PETICION_MODIFICAR_PRODUCTO + "--" + producto.getId() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldIngredientes.getText() + "--" + jTextFieldPrecio.getText());
+                if (jTextFieldImagen.getText().isEmpty()) {
+                    SocketHandler.getOut().println(Mensajes.PETICION_MODIFICAR_PRODUCTO + "--" + producto.getId() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldIngredientes.getText() + "--" + jTextFieldPrecio.getText());
+                } else {
+                    SocketHandler.getOut().println(Mensajes.PETICION_MODIFICAR_PRODUCTO + "--" + producto.getId() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldIngredientes.getText() + "--" + jTextFieldPrecio.getText()+"--"+"imagen");
+
+                    byte[] bytes = new byte[8096];
+                    FileInputStream in = new FileInputStream(imagen);
+                    OutputStream out = SocketHandler.getSocket().getOutputStream();
+
+                    int count;
+                    while ((count = in.read(bytes)) > 0) {
+                        out.write(bytes, 0, count);
+                    }
+
+                    in.close();
+                }
+
                 if (SocketHandler.getIn().readLine().equals(Mensajes.PETICION_MODIFICAR_PRODUCTO_CORRECTO)) {
                     producto.getCarta().leerCarta();
                     dispose();
@@ -178,6 +236,25 @@ public class ModificarProducto extends javax.swing.JFrame {
             Logger.getLogger(ModificarProducto.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jButtonGuardarActionPerformed
+
+    private void jTextFieldImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldImagenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldImagenActionPerformed
+
+    private void jButtonImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonImagenActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+        FileNameExtensionFilter imgFilter = new FileNameExtensionFilter("JPG & PNG Images", "jpg", "png");
+        fc.setFileFilter(imgFilter);
+        int result = fc.showOpenDialog(this);
+        fc.setVisible(true);
+
+        if (result != JFileChooser.CANCEL_OPTION) {
+            imagen = fc.getSelectedFile();
+            jTextFieldImagen.setText(imagen.getAbsoluteFile().toString());
+        }
+
+    }//GEN-LAST:event_jButtonImagenActionPerformed
 
     /**
      * @param args the command line arguments
@@ -219,10 +296,13 @@ public class ModificarProducto extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonGuardar;
+    private javax.swing.JButton jButtonImagen;
+    private javax.swing.JLabel jLabelImagen;
     private javax.swing.JLabel jLabelIngredientes;
     private javax.swing.JLabel jLabelMensaje;
     private javax.swing.JLabel jLabelNombre;
     private javax.swing.JLabel jLabelPrecio;
+    private javax.swing.JTextField jTextFieldImagen;
     private javax.swing.JTextField jTextFieldIngredientes;
     private javax.swing.JTextField jTextFieldNombre;
     private javax.swing.JTextField jTextFieldPrecio;

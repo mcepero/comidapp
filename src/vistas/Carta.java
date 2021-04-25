@@ -107,12 +107,12 @@ public class Carta extends javax.swing.JPanel {
                     SocketHandler.getOut().println(Mensajes.PETICION_FOTO_PRODUCTO + "--" + productos.get(i).getId());
                     leerImagen();
                     BufferedImage image = ImageIO.read(new File("E:\\manuel\\Documents\\DAM\\2 DAM 2020\\Proyecto\\Comidapp\\imagenesproductos\\imagenproducto.jpg"));
-                    Image newImage = image.getScaledInstance(100, 100, Image.SCALE_DEFAULT);
+                    Image newImage = image.getScaledInstance(110, 110, Image.SCALE_DEFAULT);
                     JLabel picLabel = new JLabel(new ImageIcon(newImage));
-                    picLabel.setBounds(x, y, 100,100);
+                    picLabel.setBounds((int) productos.get(i).getjPanelImagen().getAlignmentX(), (int) productos.get(i).getjPanelImagen().getAlignmentY(), 100,100);
                     productos.get(i).getjPanelImagen().add(picLabel);
-                    productos.get(i).getjPanelImagen().validate();
-                    productos.get(i).getjPanelImagen().repaint();
+                    //productos.get(i).getjPanelImagen().validate();
+                    //productos.get(i).getjPanelImagen().repaint();
                     productos.get(i).validate();
                     productos.get(i).repaint();
 
