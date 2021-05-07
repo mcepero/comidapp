@@ -50,6 +50,7 @@ public class Inicio extends javax.swing.JFrame {
         jButtonPedidos = new javax.swing.JButton();
         jButtonCarta = new javax.swing.JButton();
         jButtonRepartidores = new javax.swing.JButton();
+        jButtonValoraciones = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1300, 800));
@@ -114,6 +115,16 @@ public class Inicio extends javax.swing.JFrame {
             }
         });
 
+        jButtonValoraciones.setBackground(new java.awt.Color(144, 167, 213));
+        jButtonValoraciones.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 16)); // NOI18N
+        jButtonValoraciones.setText("Valoraciones");
+        jButtonValoraciones.setToolTipText("");
+        jButtonValoraciones.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonValoracionesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -126,7 +137,9 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(jButtonCarta, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonRepartidores, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 75, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButtonValoraciones, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
                 .addComponent(jButtonPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -139,6 +152,7 @@ public class Inicio extends javax.swing.JFrame {
             .addComponent(jButtonInicio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButtonPedidos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButtonCarta, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jButtonValoraciones, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButtonRepartidores, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -211,6 +225,17 @@ public class Inicio extends javax.swing.JFrame {
         jPanelContenedor.repaint();
     }//GEN-LAST:event_jButtonRepartidoresActionPerformed
 
+    private void jButtonValoracionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonValoracionesActionPerformed
+        jPanelContenedor.removeAll();
+        Valoraciones valoraciones = new Valoraciones(this);
+        jPanelContenedor.add(valoraciones);
+        jPanelContenedor.validate();
+        valoraciones.setSize(1000,1800);
+        jPanelContenedor.setSize(1000,1800);
+        valoraciones.setVisible(true);
+        jPanelContenedor.repaint();
+    }//GEN-LAST:event_jButtonValoracionesActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -267,6 +292,7 @@ public class Inicio extends javax.swing.JFrame {
     private javax.swing.JButton jButtonPedidos;
     private javax.swing.JButton jButtonPerfil;
     private javax.swing.JButton jButtonRepartidores;
+    private javax.swing.JButton jButtonValoraciones;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanelContenedor;
     // End of variables declaration//GEN-END:variables
