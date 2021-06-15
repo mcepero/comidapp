@@ -17,7 +17,9 @@ import utils.UsuarioActual;
  * @author Manuel
  */
 public class JPanelLogin extends javax.swing.JPanel {
+
     VentanaPrincipal parent;
+
     /**
      * Creates new form JPanelLogin
      */
@@ -41,6 +43,7 @@ public class JPanelLogin extends javax.swing.JPanel {
         jLabelTitulo = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jTextFieldContrasena = new javax.swing.JPasswordField();
+        jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(201, 214, 241));
 
@@ -70,16 +73,17 @@ public class JPanelLogin extends javax.swing.JPanel {
 
         jTextFieldContrasena.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
+        jLabel1.setFont(new java.awt.Font("Yu Gothic UI Light", 0, 36)); // NOI18N
+        jLabel1.setText("ComidApp");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap(270, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(82, 82, 82)
-                        .addComponent(jLabelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(60, 60, 60)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -96,11 +100,17 @@ public class JPanelLogin extends javax.swing.JPanel {
                                 .addComponent(jTextFieldUsuario)
                                 .addComponent(jTextFieldContrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap(242, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(144, 144, 144)
+                .addGap(85, 85, 85)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabelTitulo)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -126,60 +136,67 @@ public class JPanelLogin extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextFieldUsuarioActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        SocketHandler.getOut().println(Mensajes.PETICION_LOGIN_RESTAURANTE+"--"+jTextFieldUsuario.getText()+"--"+jTextFieldContrasena.getText());
-        String received;
-        String flag = "";
-        String[] args;
+        if (!jTextFieldUsuario.getText().isEmpty() && !jTextFieldContrasena.getText().isEmpty()) {
+            try {
+                SocketHandler.getOut().println(Mensajes.PETICION_LOGIN_RESTAURANTE + "--" + jTextFieldUsuario.getText() + "--" + jTextFieldContrasena.getText());
+                String received;
+                String flag = "";
+                String[] args;
 
-        try {
-            received = SocketHandler.getIn().readLine();
-            args=received.split("--");
-            flag = args[0];
+                received = SocketHandler.getIn().readLine();
+                args = received.split("--");
+                flag = args[0];
 
-            if (flag.equals(Mensajes.PETICION_LOGIN_RESTAURANTE_CORRECTO) && jTextFieldUsuario.getText().equals("admin")){
-                Restaurante r = new Restaurante(args[1], args[2], args[3], args[4], args[5]);
-                UsuarioActual.setUsuario(args[1]);
-                UsuarioActual.setNombre(args[2]);
-                UsuarioActual.setEmail(args[3]);
-                UsuarioActual.setDireccion(args[4]);
-                UsuarioActual.setTelefono(args[5]);
-                UsuarioActual.setId(Integer.parseInt(args[6]));
-                Administrador admin = new Administrador(r, parent);
-                admin.setVisible(true);
-                parent.setVisible(false);
+                if (flag.equals(Mensajes.PETICION_LOGIN_RESTAURANTE_CORRECTO) && jTextFieldUsuario.getText().toLowerCase().equals("admin")) {
+                    Restaurante r = new Restaurante(args[1], args[2], args[3], args[4], args[5]);
+                    UsuarioActual.setUsuario(args[1]);
+                    UsuarioActual.setNombre(args[2]);
+                    UsuarioActual.setEmail(args[3]);
+                    UsuarioActual.setDireccion(args[4]);
+                    UsuarioActual.setTelefono(args[5]);
+                    UsuarioActual.setId(Integer.parseInt(args[6]));
+                    Administrador admin = new Administrador(r, parent);
+                    admin.setVisible(true);
+                    parent.setVisible(false);
 
-            }else if (flag.equals(Mensajes.PETICION_LOGIN_RESTAURANTE_CORRECTO)){
-                jLabelMensaje.setForeground(Color.GREEN);
-                jLabelMensaje.setText("Login correcto");
-                Restaurante r = new Restaurante(args[1], args[2], args[3], args[4], args[5]);
-                UsuarioActual.setUsuario(args[1]);
-                UsuarioActual.setNombre(args[2]);
-                UsuarioActual.setEmail(args[3]);
-                UsuarioActual.setDireccion(args[4]);
-                UsuarioActual.setTelefono(args[5]);
-                UsuarioActual.setId(Integer.parseInt(args[6]));
-                Inicio i = new Inicio(r, parent);
-                i.setVisible(true);
-                parent.setVisible(false);
+                } else if (flag.equals(Mensajes.PETICION_LOGIN_RESTAURANTE_CORRECTO)) {
+                    jLabelMensaje.setForeground(Color.GREEN);
+                    jLabelMensaje.setText("Login correcto");
+                    Restaurante r = new Restaurante(args[1], args[2], args[3], args[4], args[5]);
+                    UsuarioActual.setUsuario(args[1]);
+                    UsuarioActual.setNombre(args[2]);
+                    UsuarioActual.setEmail(args[3]);
+                    UsuarioActual.setDireccion(args[4]);
+                    UsuarioActual.setTelefono(args[5]);
+                    UsuarioActual.setId(Integer.parseInt(args[6]));
+                    Inicio i = new Inicio(r, parent);
+                    i.setVisible(true);
+                    parent.setVisible(false);
 
-            }else if(flag.equals(Mensajes.PETICION_LOGIN_RESTAURANTE_ERROR)){
-                jLabelMensaje.setForeground(Color.RED);
-                jLabelMensaje.setText("Login incorrecto");
+                } else if (flag.equals(Mensajes.PETICION_LOGIN_RESTAURANTE_ERROR)) {
+                    jLabelMensaje.setForeground(Color.RED);
+                    jLabelMensaje.setText("Login incorrecto");
+                }
+            } catch (IOException e) {
+               System.out.println("Se ha perdido la conexión con el servidor.");
+            } catch (NullPointerException ex) {
+                System.out.println("Error al conectar con el servidor.");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } else {
+            jLabelMensaje.setForeground(Color.RED);
+            jLabelMensaje.setText("Los campos usuario y contraseña no pueden estar vacios.");
         }
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     public void setParent(VentanaPrincipal parent) {
         this.parent = parent;
     }
 
-    
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabelContrasena;
     private javax.swing.JLabel jLabelMensaje;
     private javax.swing.JLabel jLabelTitulo;

@@ -46,7 +46,6 @@ public class Inicio extends javax.swing.JFrame {
         jPanelContenedor = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jButtonPerfil = new javax.swing.JButton();
-        jButtonInicio = new javax.swing.JButton();
         jButtonPedidos = new javax.swing.JButton();
         jButtonCarta = new javax.swing.JButton();
         jButtonRepartidores = new javax.swing.JButton();
@@ -72,16 +71,6 @@ public class Inicio extends javax.swing.JFrame {
         jButtonPerfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonPerfilActionPerformed(evt);
-            }
-        });
-
-        jButtonInicio.setBackground(new java.awt.Color(144, 167, 213));
-        jButtonInicio.setFont(new java.awt.Font("Yu Gothic UI Semibold", 1, 24)); // NOI18N
-        jButtonInicio.setText("Inicio");
-        jButtonInicio.setToolTipText("");
-        jButtonInicio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonInicioActionPerformed(evt);
             }
         });
 
@@ -130,8 +119,6 @@ public class Inicio extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jButtonInicio, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButtonCarta, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -139,7 +126,7 @@ public class Inicio extends javax.swing.JFrame {
                 .addComponent(jButtonRepartidores, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonValoraciones, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 216, Short.MAX_VALUE)
                 .addComponent(jButtonPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -149,7 +136,6 @@ public class Inicio extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jButtonPerfil, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jButtonInicio, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButtonPedidos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButtonCarta, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButtonValoraciones, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -186,15 +172,10 @@ public class Inicio extends javax.swing.JFrame {
         jPanelContenedor.repaint();
     }//GEN-LAST:event_jButtonPerfilActionPerformed
 
-    private void jButtonInicioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonInicioActionPerformed
-        jPanelContenedor.removeAll();
-        jPanelContenedor.repaint();
-    }//GEN-LAST:event_jButtonInicioActionPerformed
-
     private void jButtonPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPedidosActionPerformed
         jPanelContenedor.removeAll();
         Pedidos p = new Pedidos(this);
-        jPanelContenedor.add(p);
+        jPanelContenedor.add(p, BorderLayout.CENTER);
         jPanelContenedor.validate();
         p.setSize(1000,1800);
         jPanelContenedor.setSize(1000,1800);
@@ -288,7 +269,6 @@ public class Inicio extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCarta;
-    private javax.swing.JButton jButtonInicio;
     private javax.swing.JButton jButtonPedidos;
     private javax.swing.JButton jButtonPerfil;
     private javax.swing.JButton jButtonRepartidores;

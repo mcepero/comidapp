@@ -6,6 +6,7 @@
 package vistas;
 
 import java.awt.Color;
+import java.io.IOException;
 import javax.swing.JTextField;
 import utils.Mensajes;
 import utils.SocketHandler;
@@ -24,8 +25,8 @@ public class ModificarPerfil extends javax.swing.JPanel {
         initComponents();
         rellenarComponentes();
     }
-    
-    public void rellenarComponentes(){
+
+    public void rellenarComponentes() {
         jTextFieldUsuario.setText(UsuarioActual.getUsuario());
         jTextFieldNombre.setText(UsuarioActual.getNombre());
         jTextFieldEmail.setText(UsuarioActual.getEmail());
@@ -172,8 +173,8 @@ public class ModificarPerfil extends javax.swing.JPanel {
                         .addGap(254, 254, 254)
                         .addComponent(jButtonGuardar))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(201, 201, 201)
-                        .addComponent(jLabelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(165, 165, 165)
+                        .addComponent(jLabelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(178, 178, 178))
         );
         layout.setVerticalGroup(
@@ -242,19 +243,31 @@ public class ModificarPerfil extends javax.swing.JPanel {
 
     private void jButtonGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonGuardarActionPerformed
         if (jTextFieldContrasena.getText().isEmpty()) {
-            SocketHandler.getOut().println(Mensajes.PETICION_MODIFICAR_RESTAURANTE+"--"+ UsuarioActual.getUsuario() +"--"+jTextFieldUsuario.getText()+"--"+jTextFieldEmail.getText()+"--"+jTextFieldNombre.getText()+"--"+jTextFieldDireccion.getText()+"--"+jTextFieldTelefono.getText());
-        }else{
-            SocketHandler.getOut().println(Mensajes.PETICION_MODIFICAR_RESTAURANTE+"--"+ UsuarioActual.getUsuario()+ "--"+jTextFieldUsuario.getText()+"--"+jTextFieldEmail.getText()+"--"+jTextFieldNombre.getText()+"--"+jTextFieldDireccion.getText()+"--"+jTextFieldTelefono.getText()+"--"+jTextFieldContrasena.getText());
+            SocketHandler.getOut().println(Mensajes.PETICION_MODIFICAR_RESTAURANTE + "--" + UsuarioActual.getUsuario() + "--" + jTextFieldUsuario.getText() + "--" + jTextFieldEmail.getText() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldDireccion.getText() + "--" + jTextFieldTelefono.getText()+"--"+UsuarioActual.getEmail());
+        } else {
+            SocketHandler.getOut().println(Mensajes.PETICION_MODIFICAR_RESTAURANTE + "--" + UsuarioActual.getUsuario() + "--" + jTextFieldUsuario.getText() + "--" + jTextFieldEmail.getText() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldDireccion.getText() + "--" + jTextFieldTelefono.getText() + "--" + jTextFieldContrasena.getText()+"--"+UsuarioActual.getEmail());
         }
-        
-        UsuarioActual.setUsuario(jTextFieldUsuario.getText());
-        UsuarioActual.setNombre(jTextFieldNombre.getText());
-        UsuarioActual.setEmail(jTextFieldEmail.getText());
-        UsuarioActual.setDireccion(jTextFieldDireccion.getText());
-        UsuarioActual.setTelefono(jTextFieldTelefono.getText());
-        
-        jLabelMensaje.setText("Perfil modificado correctamente.");
-        jLabelMensaje.setForeground(Color.GREEN);
+
+        try {
+            String received = SocketHandler.getIn().readLine();
+            String[] args = received.split("--");
+            String flag = args[0];
+            if (flag.equals(Mensajes.PETICION_MODIFICAR_RESTAURANTE_CORRECTO)) {
+                UsuarioActual.setUsuario(jTextFieldUsuario.getText());
+                UsuarioActual.setNombre(jTextFieldNombre.getText());
+                UsuarioActual.setEmail(jTextFieldEmail.getText());
+                UsuarioActual.setDireccion(jTextFieldDireccion.getText());
+                UsuarioActual.setTelefono(jTextFieldTelefono.getText());
+
+                jLabelMensaje.setText("Perfil modificado correctamente.");
+                jLabelMensaje.setForeground(Color.GREEN);
+            }else if(flag.equals(Mensajes.PETICION_MODIFICAR_RESTAURANTE_ERROR)){
+                jLabelMensaje.setText("Error al modificar. Usuario o email repetidos.");
+                jLabelMensaje.setForeground(Color.RED);
+            }
+        } catch (IOException ex) {
+            ex.getMessage();
+        }
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 
     public JTextField getjTextFieldContrasena() {
@@ -305,8 +318,6 @@ public class ModificarPerfil extends javax.swing.JPanel {
         this.jTextFieldUsuario = jTextFieldUsuario;
     }
 
-    
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonGuardar;

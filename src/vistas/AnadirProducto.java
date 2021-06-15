@@ -6,15 +6,21 @@
 package vistas;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.nio.file.Files;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import utils.Mensajes;
@@ -209,8 +215,7 @@ public class AnadirProducto extends javax.swing.JFrame {
                     SocketHandler.getOut().println(Mensajes.PETICION_ANADIR_PRODUCTO + "--" + UsuarioActual.getId() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldIngredientes.getText() + "--" + jTextFieldPrecio.getText());
                     //SocketHandler.getOut().println("imagen");
                     //long length = imagen.length();
-
-                    byte[] bytes = new byte[8096];//Files.readAllBytes(imagen.toPath());
+                    /*byte[] bytes = new byte[8096];//Files.readAllBytes(imagen.toPath());
                     FileInputStream in = new FileInputStream(imagen);
                     OutputStream out = SocketHandler.getSocket().getOutputStream();
 
@@ -219,8 +224,13 @@ public class AnadirProducto extends javax.swing.JFrame {
                         out.write(bytes, 0, count);
                     }
 
-                    in.close();
-                    /*out.close();*/
+                    in.close();*/
+ /*out.close();*/
+                    OutputStream out = SocketHandler.getSocket().getOutputStream();
+                    PrintWriter dos = new PrintWriter(out);
+                    String encode = Base64.getEncoder().encodeToString(Files.readAllBytes(imagen.toPath()));
+                    dos.println(encode);
+                    dos.flush();
 
                     if (SocketHandler.getIn().readLine().equals(Mensajes.PETICION_ANADIR_PRODUCTO_CORRECTO)) {
                         carta.leerCarta();
@@ -232,7 +242,15 @@ public class AnadirProducto extends javax.swing.JFrame {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(AnadirProducto.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Se ha perdido la conexión con el servidor.");
+            JFrame newFrame = new JFrame();
+            newFrame.setSize(350, 150);
+            newFrame.setLocationRelativeTo(null);
+            JLabel label = new JLabel("Se ha perdido la conexión con el servidor.", SwingConstants.CENTER);
+            label.setFont(new Font("Tahoma", Font.PLAIN, 18));
+            newFrame.add(label);
+            newFrame.setAlwaysOnTop(true);
+            newFrame.setVisible(true);
         }
     }//GEN-LAST:event_jButtonGuardarActionPerformed
 

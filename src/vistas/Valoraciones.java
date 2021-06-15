@@ -6,6 +6,7 @@
 package vistas;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
@@ -15,11 +16,13 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.SwingConstants;
 import model.Producto;
 import utils.Mensajes;
 import utils.RecargarPedidos;
@@ -88,7 +91,15 @@ public class Valoraciones extends javax.swing.JPanel {
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(Valoraciones.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Se ha perdido la conexión con el servidor.");
+            JFrame newFrame = new JFrame();
+            newFrame.setSize(350, 150);
+            newFrame.setLocationRelativeTo(null);
+            JLabel label = new JLabel("Se ha perdido la conexión con el servidor.", SwingConstants.CENTER);
+            label.setFont(new Font("Tahoma", Font.PLAIN, 18));
+            newFrame.add(label);
+            newFrame.setAlwaysOnTop(true);
+            newFrame.setVisible(true);
         }
 
     }

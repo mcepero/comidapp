@@ -6,27 +6,36 @@
 package vistas;
 
 import java.awt.BorderLayout;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.net.SocketException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneLayout;
+import javax.swing.SwingConstants;
 import utils.Mensajes;
 import utils.SocketHandler;
 import utils.UsuarioActual;
@@ -38,6 +47,7 @@ import utils.UsuarioActual;
 public class Carta extends javax.swing.JPanel {
 
     private Inicio inicio;
+    InputStream in;
     int x = 0;
     int y = 0;
 
@@ -50,6 +60,11 @@ public class Carta extends javax.swing.JPanel {
         GridBagLayout gl = new java.awt.GridBagLayout();
         jPanelContenedor.setLayout(gl);
         setSize(1000, 1800);
+        try {
+            in = SocketHandler.getSocket().getInputStream();
+        } catch (IOException ex) {
+            Logger.getLogger(Carta.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         leerCarta();
     }
@@ -103,19 +118,46 @@ public class Carta extends javax.swing.JPanel {
                     y++;
                 }
 
+                InputStream is = SocketHandler.getSocket().getInputStream();
+
                 for (int i = 0; i < productos.size(); i++) {
-                    SocketHandler.getOut().println(Mensajes.PETICION_FOTO_PRODUCTO + "--" + productos.get(i).getId());
+                    SocketHandler.getOut().println(Mensajes.PETICION_CARGAR_IMAGEN + "--" + UsuarioActual.getId() + "--" + productos.get(i).getjLabelNombre().getText());
+                    BufferedReader br = new BufferedReader(new InputStreamReader(is));
+                    try {
+                        
+                        //Lee la imagen del servidor y la guarda en un fichero (se sobreescribe cada vez que llega una nueva)
+                        String cadena = br.readLine();
+                        byte[] decodedString = Base64.getDecoder().decode(cadena);
+                        File imagen = new File(".\\imagenesproductos\\imagenproducto.jpg");
+                        FileOutputStream out = new FileOutputStream(imagen);
+                        out.write(decodedString);
+                        out.close();
+                        
+                        //Lee la imagen del fichero y la añade al producto
+                        BufferedImage image = ImageIO.read(new File(".\\imagenesproductos\\imagenproducto.jpg"));
+                        Image newImage = image.getScaledInstance(120, 120, Image.SCALE_DEFAULT);
+                        JLabel picLabel = new JLabel(new ImageIcon(newImage));
+                        picLabel.setBounds((int) productos.get(i).getjPanelImagen().getAlignmentX(), (int) productos.get(i).getjPanelImagen().getAlignmentY(), 100, 100);
+                        productos.get(i).getjPanelImagen().add(picLabel);
+                        productos.get(i).validate();
+                        productos.get(i).repaint();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    //Funciona
+                /*    SocketHandler.getOut().println(Mensajes.PETICION_FOTO_PRODUCTO + "--" + productos.get(i).getId());
                     leerImagen();
                     BufferedImage image = ImageIO.read(new File("E:\\manuel\\Documents\\DAM\\2 DAM 2020\\Proyecto\\Comidapp\\imagenesproductos\\imagenproducto.jpg"));
                     Image newImage = image.getScaledInstance(110, 110, Image.SCALE_DEFAULT);
                     JLabel picLabel = new JLabel(new ImageIcon(newImage));
-                    picLabel.setBounds((int) productos.get(i).getjPanelImagen().getAlignmentX(), (int) productos.get(i).getjPanelImagen().getAlignmentY(), 100,100);
+                    picLabel.setBounds((int) productos.get(i).getjPanelImagen().getAlignmentX(), (int) productos.get(i).getjPanelImagen().getAlignmentY(), 100, 100);
                     productos.get(i).getjPanelImagen().add(picLabel);
                     //productos.get(i).getjPanelImagen().validate();
                     //productos.get(i).getjPanelImagen().repaint();
                     productos.get(i).validate();
-                    productos.get(i).repaint();
-
+                    productos.get(i).repaint();*/
                 }
 
             } catch (IOException ex) {
@@ -123,7 +165,15 @@ public class Carta extends javax.swing.JPanel {
             }
 
         } catch (IOException ex) {
-            Logger.getLogger(Carta.class.getName()).log(Level.SEVERE, null, ex);
+           System.out.println("Se ha perdido la conexión con el servidor.");
+            JFrame newFrame = new JFrame();
+            newFrame.setSize(350, 150);
+            newFrame.setLocationRelativeTo(null);
+            JLabel label = new JLabel("Se ha perdido la conexión con el servidor.",SwingConstants.CENTER);
+            label.setFont(new Font("Tahoma", Font.PLAIN, 18));
+            newFrame.add(label);
+            newFrame.setAlwaysOnTop(true);
+            newFrame.setVisible(true);
         }
 
     }

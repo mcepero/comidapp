@@ -73,8 +73,8 @@ public class JPanelPedido extends javax.swing.JPanel {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabelDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabelPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(94, 94, 94))))
+                        .addComponent(jLabelPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(47, 47, 47))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -89,6 +89,9 @@ public class JPanelPedido extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        if (!pedidos.getRecargarPedidos().isInterrupted()) {
+            pedidos.getRecargarPedidos().interrupt();
+        }
         pedidos.getjPanelContenedor().removeAll();
         DetallesPedido dp = new DetallesPedido(id, pedidos);
         pedidos.getjPanelContenedor().add(dp);
@@ -97,6 +100,7 @@ public class JPanelPedido extends javax.swing.JPanel {
         pedidos.getjPanelContenedor().setSize(1000,1800);
         dp.setVisible(true);
         pedidos.getjPanelContenedor().repaint();
+        pedidos.getRecargarPedidos().setRecargar(false);
     }//GEN-LAST:event_formMouseClicked
 
     public Pedidos getPedidos() {

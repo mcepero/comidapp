@@ -41,7 +41,7 @@ public class EliminarRepartidor extends javax.swing.JFrame {
         jButtonSi = new javax.swing.JButton();
         jButtonNo = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabelTitulo.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabelTitulo.setText("¿Eliminar repartidor?");

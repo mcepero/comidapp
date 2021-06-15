@@ -6,9 +6,13 @@
 package vistas;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import utils.Mensajes;
 import utils.SocketHandler;
 import utils.UsuarioActual;
@@ -20,11 +24,12 @@ import utils.UsuarioActual;
 public class AnadirRepartidor extends javax.swing.JFrame {
 
     Repartidores repartidores;
+
     /**
      * Creates new form AnadirRepartidor
      */
     public AnadirRepartidor(Repartidores repartidores) {
-        this.repartidores=repartidores;
+        this.repartidores = repartidores;
         initComponents();
     }
 
@@ -45,7 +50,7 @@ public class AnadirRepartidor extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabelCodigo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLabelCodigo.setText("Código:");
+        jLabelCodigo.setText("DNI: ");
 
         jButtonAnadir.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButtonAnadir.setText("Añadir");
@@ -92,18 +97,26 @@ public class AnadirRepartidor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonAnadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAnadirActionPerformed
-        SocketHandler.getOut().println(Mensajes.PETICION_ANADIR_REPARTIDOR+"--"+UsuarioActual.getId()+"--"+jTextFieldCodigo.getText());
+        SocketHandler.getOut().println(Mensajes.PETICION_ANADIR_REPARTIDOR + "--" + UsuarioActual.getId() + "--" + jTextFieldCodigo.getText());
         try {
             String received = SocketHandler.getIn().readLine();
             if (received.equals(Mensajes.PETICION_ANADIR_REPARTIDOR_ERROR)) {
                 jLabelMensaje.setForeground(Color.red);
                 jLabelMensaje.setText("El DNI no existe. Introdúzcalo de nuevo.");
-            }else{
+            } else {
                 repartidores.obtenerRepartidores();
                 dispose();
             }
         } catch (IOException ex) {
-            Logger.getLogger(AnadirRepartidor.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Se ha perdido la conexión con el servidor.");
+            JFrame newFrame = new JFrame();
+            newFrame.setSize(350, 150);
+            newFrame.setLocationRelativeTo(null);
+            JLabel label = new JLabel("Se ha perdido la conexión con el servidor.", SwingConstants.CENTER);
+            label.setFont(new Font("Tahoma", Font.PLAIN, 18));
+            newFrame.add(label);
+            newFrame.setAlwaysOnTop(true);
+            newFrame.setVisible(true);
         }
     }//GEN-LAST:event_jButtonAnadirActionPerformed
 

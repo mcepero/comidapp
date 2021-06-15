@@ -10,6 +10,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.util.Base64;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
@@ -211,11 +214,11 @@ public class ModificarProducto extends javax.swing.JFrame {
                 jLabelMensaje.setForeground(Color.red);
             } else {
                 if (jTextFieldImagen.getText().isEmpty()) {
-                    SocketHandler.getOut().println(Mensajes.PETICION_MODIFICAR_PRODUCTO + "--" + producto.getId() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldIngredientes.getText() + "--" + jTextFieldPrecio.getText());
+                    SocketHandler.getOut().println(Mensajes.PETICION_MODIFICAR_PRODUCTO + "--" + UsuarioActual.getId() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldIngredientes.getText() + "--" + jTextFieldPrecio.getText());
                 } else {
-                    SocketHandler.getOut().println(Mensajes.PETICION_MODIFICAR_PRODUCTO + "--" + producto.getId() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldIngredientes.getText() + "--" + jTextFieldPrecio.getText()+"--"+"imagen");
+                    SocketHandler.getOut().println(Mensajes.PETICION_MODIFICAR_PRODUCTO + "--" + UsuarioActual.getId() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldIngredientes.getText() + "--" + jTextFieldPrecio.getText()+"--"+"imagen");
 
-                    byte[] bytes = new byte[8096];
+                   /* byte[] bytes = new byte[8096];
                     FileInputStream in = new FileInputStream(imagen);
                     OutputStream out = SocketHandler.getSocket().getOutputStream();
 
@@ -224,7 +227,14 @@ public class ModificarProducto extends javax.swing.JFrame {
                         out.write(bytes, 0, count);
                     }
 
-                    in.close();
+                    in.close();*/
+                    
+                    OutputStream out = SocketHandler.getSocket().getOutputStream();
+                    PrintWriter dos = new PrintWriter(out);
+                    String encode = Base64.getEncoder().encodeToString(Files.readAllBytes(imagen.toPath()));
+                    dos.println(encode);
+                    dos.flush();
+
                 }
 
                 if (SocketHandler.getIn().readLine().equals(Mensajes.PETICION_MODIFICAR_PRODUCTO_CORRECTO)) {

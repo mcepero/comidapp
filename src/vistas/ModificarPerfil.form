@@ -16,7 +16,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="131" max="-2" attributes="0"/>
@@ -65,8 +65,8 @@
                       <Component id="jButtonGuardar" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="201" max="-2" attributes="0"/>
-                      <Component id="jLabelMensaje" min="-2" pref="201" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="165" max="-2" attributes="0"/>
+                      <Component id="jLabelMensaje" min="-2" pref="277" max="-2" attributes="0"/>
                   </Group>
               </Group>
               <EmptySpace min="-2" pref="178" max="-2" attributes="0"/>

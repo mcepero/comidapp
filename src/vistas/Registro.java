@@ -7,6 +7,12 @@ package vistas;
 
 import java.awt.Color;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.DefaultComboBoxModel;
 import utils.Mensajes;
 import utils.SocketHandler;
 
@@ -19,8 +25,30 @@ public class Registro extends javax.swing.JPanel {
     /**
      * Creates new form Registro
      */
+    ArrayList<String> categorias;
+
     public Registro() {
         initComponents();
+        categorias = new ArrayList<>();
+        try {
+            SocketHandler.getOut().println(Mensajes.PETICION_OBTENER_CATEGORIAS);
+
+            String received = SocketHandler.getIn().readLine();
+            String[] args = received.split("--");
+            String flag = args[0];
+            if (flag.equals(Mensajes.PETICION_OBTENER_CATEGORIAS_CORRECTO)) {
+                int numCategorias = Integer.parseInt(args[1]);
+                for (int i = 0; i < numCategorias; i++) {
+                    received = SocketHandler.getIn().readLine();
+                    args = received.split("--");
+                    categorias.add(args[1]);
+                }
+            }
+            jComboBoxCategoria.setModel(new DefaultComboBoxModel(categorias.toArray()));
+
+        } catch (IOException ex) {
+            System.out.println("Se ha perdido la conexión con el servidor.");
+        }
     }
 
     /**
@@ -49,6 +77,8 @@ public class Registro extends javax.swing.JPanel {
         jLabelCiudad = new javax.swing.JLabel();
         jTextFieldCiudad = new javax.swing.JTextField();
         jTextFieldContrasena = new javax.swing.JPasswordField();
+        jComboBoxCategoria = new javax.swing.JComboBox<>();
+        jLabelCiudad1 = new javax.swing.JLabel();
 
         jTextFieldUsuario.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jTextFieldUsuario.setToolTipText("");
@@ -129,6 +159,9 @@ public class Registro extends javax.swing.JPanel {
 
         jTextFieldContrasena.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
+        jLabelCiudad1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabelCiudad1.setText("Categoría");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -166,12 +199,16 @@ public class Registro extends javax.swing.JPanel {
                                     .addComponent(jTextFieldDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jTextFieldTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(61, 61, 61)
-                                .addComponent(jTextFieldCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addGap(9, 9, 9)
-                                .addComponent(jButtonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jButtonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabelCiudad1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(61, 61, 61)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jComboBoxCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jTextFieldCiudad, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE))))
                         .addGap(166, 166, 166))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(254, 254, 254)
@@ -214,7 +251,11 @@ public class Registro extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jTextFieldCiudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelCiudad))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBoxCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabelCiudad1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabelMensaje, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(27, 27, 27)
                 .addComponent(jButtonRegistrar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -227,27 +268,52 @@ public class Registro extends javax.swing.JPanel {
     }//GEN-LAST:event_jTextFieldUsuarioActionPerformed
 
     private void jButtonRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRegistrarActionPerformed
-        SocketHandler.getOut().println(Mensajes.PETICION_REGISTRO_RESTAURANTE+"--"+jTextFieldUsuario.getText()+"--"+jTextFieldEmail.getText()+"--"+jTextFieldContrasena.getText()+"--"+jTextFieldNombre.getText()+"--"+jTextFieldDireccion.getText()+"--"+jTextFieldTelefono.getText()+"--"+jTextFieldCiudad.getText());
-        String received;
-        String flag = "";
-        String[] args;
+        Pattern pattern = Pattern
+                .compile("^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                        + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$");
 
-        try {
-            received = SocketHandler.getIn().readLine();
-            args=received.split("--");
-            flag = args[0];
+        Matcher mather = pattern.matcher(jTextFieldEmail.getText());
 
-            if (flag.equals(Mensajes.PETICION_REGISTRO_RESTAURANTE_CORRECTO)){
-                jLabelMensaje.setForeground(Color.GREEN);
-                jLabelMensaje.setText("Registro correcto");
-
-            }else if(flag.equals(Mensajes.PETICION_REGISTRO_RESTAURANTE_ERROR)){
-                jLabelMensaje.setForeground(Color.RED);
-                jLabelMensaje.setText("Registro incorrecto");
+        if (mather.find() == true) {
+            boolean isNumeric = true;
+            for (int i = 0; i < jTextFieldTelefono.getText().length(); i++) {
+                if (!Character.isDigit(jTextFieldTelefono.getText().charAt(i))) {
+                    isNumeric = false;
+                }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            if (jTextFieldTelefono.getText().length() == 9 && isNumeric) {
+
+                int numCategoria = jComboBoxCategoria.getSelectedIndex() + 1;
+                SocketHandler.getOut().println(Mensajes.PETICION_REGISTRO_RESTAURANTE + "--" + jTextFieldUsuario.getText() + "--" + jTextFieldEmail.getText() + "--" + jTextFieldContrasena.getText() + "--" + jTextFieldNombre.getText() + "--" + jTextFieldDireccion.getText() + "--" + jTextFieldTelefono.getText() + "--" + jTextFieldCiudad.getText() + "--" + numCategoria);
+                String received;
+                String flag = "";
+                String[] args;
+
+                try {
+                    received = SocketHandler.getIn().readLine();
+                    args = received.split("--");
+                    flag = args[0];
+
+                    if (flag.equals(Mensajes.PETICION_REGISTRO_RESTAURANTE_CORRECTO)) {
+                        jLabelMensaje.setForeground(Color.GREEN);
+                        jLabelMensaje.setText("Registro correcto");
+
+                    } else if (flag.equals(Mensajes.PETICION_REGISTRO_RESTAURANTE_ERROR)) {
+                        jLabelMensaje.setForeground(Color.RED);
+                        jLabelMensaje.setText("Usuario o email repetidos");
+                    }
+                } catch (IOException e) {
+                    System.out.println("Se ha perdido la conexión con el servidor.");
+                }
+            }else{
+                jLabelMensaje.setForeground(Color.RED);
+                jLabelMensaje.setText("Teléfono inválido.");
+            }
+        } else {
+            jLabelMensaje.setForeground(Color.RED);
+            jLabelMensaje.setText("Email inválido.");
         }
+
     }//GEN-LAST:event_jButtonRegistrarActionPerformed
 
     private void jTextFieldNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldNombreActionPerformed
@@ -273,7 +339,9 @@ public class Registro extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonRegistrar;
+    private javax.swing.JComboBox<String> jComboBoxCategoria;
     private javax.swing.JLabel jLabelCiudad;
+    private javax.swing.JLabel jLabelCiudad1;
     private javax.swing.JLabel jLabelContrasena;
     private javax.swing.JLabel jLabelDireccion;
     private javax.swing.JLabel jLabelEmail;

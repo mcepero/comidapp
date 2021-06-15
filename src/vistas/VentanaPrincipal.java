@@ -6,10 +6,15 @@
 package vistas;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.io.IOException;
 import java.lang.System.Logger;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.util.logging.Level;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.SwingConstants;
 import utils.Mensajes;
 import utils.SocketHandler;
 
@@ -62,7 +67,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanelLogin1, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
+            .addComponent(jPanelLogin1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -121,11 +126,19 @@ public class VentanaPrincipal extends javax.swing.JFrame {
     public void conectar() {
         try {
             SocketHandler.setSocket(new Socket(hostServerName, servicePort));
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName()).log(Level.SEVERE, null, ex);
+            SocketHandler.setOut();
+            SocketHandler.setIn();
+        } catch (Exception ex) {
+            System.out.println("Error al conectar con el servidor");
+            JFrame newFrame = new JFrame();
+            newFrame.setSize(300, 150);
+            newFrame.setLocationRelativeTo(null);
+            JLabel label = new JLabel("Error al conectar con el servidor",SwingConstants.CENTER);
+            label.setFont(new Font("Tahoma", Font.PLAIN, 18));
+            newFrame.add(label);
+            newFrame.setAlwaysOnTop(true);
+            newFrame.setVisible(true);
         }
-        SocketHandler.setOut();
-        SocketHandler.setIn();
 
     }
 

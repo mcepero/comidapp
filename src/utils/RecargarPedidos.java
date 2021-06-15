@@ -16,23 +16,35 @@ import vistas.Pedidos;
 public class RecargarPedidos extends Thread {
 
     private Pedidos pedidos;
+    private boolean recargar;
 
     public RecargarPedidos(Pedidos pedidos) {
         this.pedidos = pedidos;
+        this.recargar=true;
     }
 
     @Override
     public void run() {
-        while (true) {
+        while (recargar) {
             try {
                 synchronized (this) {
-                    pedidos.leerCarta();
                     sleep(30000);
+                    pedidos.leerCarta();
                 }
             } catch (InterruptedException ex) {
-                Logger.getLogger(RecargarPedidos.class.getName()).log(Level.SEVERE, null, ex);
+               Thread.currentThread().interrupt();
             }
         }
     }
+
+    public boolean isRecargar() {
+        return recargar;
+    }
+
+    public void setRecargar(boolean recargar) {
+        this.recargar = recargar;
+    }
+    
+    
 
 }
